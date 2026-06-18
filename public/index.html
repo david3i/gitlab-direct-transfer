@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GitLab Group 快速轉移工具</title>
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<h1>GitLab Group 快速轉移工具</h1>
+<div class="container">
+
+<!-- Credentials -->
+<div class="card">
+  <h2>認證設定 Credentials</h2>
+  <div class="grid2">
+    <div>
+      <div class="col-label">來源 Source</div>
+      <label>GitLab URL</label>
+      <input type="url" id="src-url" value="https://gitlab-devops.iii.org.tw">
+      <label>Group Path</label>
+      <input type="text" id="src-group" value="iiidevops">
+      <label>Username</label>
+      <input type="text" id="src-user" placeholder="your username">
+      <label>PAT (Personal Access Token)</label>
+      <input type="password" id="src-pat" placeholder="glpat-xxxxxxxxxxxx">
+    </div>
+    <div>
+      <div class="col-label">目標 Target</div>
+      <label>GitLab URL</label>
+      <input type="url" id="tgt-url" value="http://140.92.141.178:30000">
+      <label>Group Path</label>
+      <input type="text" id="tgt-group" value="iii-devsecops">
+      <label>Username</label>
+      <input type="text" id="tgt-user" placeholder="your username">
+      <label>PAT (Personal Access Token)</label>
+      <input type="password" id="tgt-pat" placeholder="glpat-xxxxxxxxxxxx">
+    </div>
+  </div>
+</div>
+
+<!-- Options -->
+<div class="card">
+  <h2>選項 Options</h2>
+  <div class="opts">
+    <label><input type="checkbox" id="opt-skip" checked> 略過已存在的專案</label>
+    <label><input type="checkbox" id="opt-tags" checked> 複製 Tags</label>
+    <label><input type="checkbox" id="opt-settings" checked> 複製專案設定</label>
+    <label><input type="checkbox" id="opt-dry"> 試運行（不實際執行）</label>
+  </div>
+</div>
+
+<!-- Buttons -->
+<div class="card" style="padding: 12px 20px;">
+  <div class="btns">
+    <button id="btn-validate" onclick="doValidate()">驗證連線 Validate</button>
+    <button id="btn-compare" onclick="doCompare()">比對兩邊差異 Compare</button>
+    <label style="font-size:.82rem;cursor:pointer;font-weight:normal"
+           title="逐一比對每個專案的分支與標籤（較慢，但能找出部分轉移失敗的案子）">
+      <input type="checkbox" id="opt-deep"> 全面比對（分支）
+    </label>
+    <button id="btn-start" onclick="doStart()">開始轉移 Start Transfer</button>
+    <button id="btn-stop" onclick="doStop()">停止 Stop</button>
+    <button id="btn-clear" onclick="doClear()" style="background:#b91c1c;color:#fff;margin-left:16px;">清除目標專案 Clear Target</button>
+    <span id="status-text">就緒 Ready</span>
+  </div>
+</div>
+
+<!-- Import / Export -->
+<div class="card" id="ie-card">
+  <h2 style="cursor:pointer;user-select:none" onclick="toggleIE()">
+    匯入 / 匯出 Import / Export &nbsp;<span id="ie-arrow">▸</span>
+  </h2>
+  <div id="ie-body" style="display:none">
+    <div class="ie-grid">
+      <!-- Export -->
+      <div class="ie-section">
+        <h3>匯出 Export（來源 GitLab → 本機 .tar.gz）</h3>
+        <div class="ie-row">
+          <label>專案路徑</label>
+          <input id="exp-src-path" placeholder="iiidevops/a3nasw02（留空＝整個群組）">
+        </div>
+        <div class="ie-row">
+          <label>儲存目錄</label>
+          <input id="exp-out-dir" placeholder="C:\gitlab-exports">
+        </div>
+        <button class="btn-ie" id="btn-export" onclick="doExport()">匯出 Export</button>
+        <p class="ie-note">git clone --mirror → git bundle create，輸出 <b>.bundle</b> 檔（含 LFS）。不依賴 GitLab API 匯出功能。</p>
+      </div>
+      <!-- Import -->
+      <div class="ie-section">
+        <h3>匯入 Import（本機檔案 → 目標 GitLab）</h3>
+        <div class="ie-row">
+          <label>目標 Namespace</label>
+          <input id="imp-namespace" placeholder="iii-devsecops">
+        </div>
+        <div class="ie-row">
+          <label>檔案 / 目錄路徑</label>
+          <input id="imp-path" placeholder="C:\gitlab-exports（目錄）或 project.bundle（單檔）">
+          <button class="btn-browse" onclick="browseImpPath('file')" title="選取單一檔案">選檔</button>
+        </div>
+        <button class="btn-ie" id="btn-import" onclick="doImport()">匯入 Import</button>
+        <p class="ie-note"><b>.bundle</b> → git push 模式（無大小限制）．<b>.tar.gz</b> → GitLab API 模式（自動處理 413）。</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Compare Results -->
+<div class="card" id="cmp-card" style="display:none">
+  <h2>比對結果 Compare Results &nbsp;<span id="cmp-summary" style="font-weight:normal;text-transform:none;letter-spacing:0"></span></h2>
+  <div id="cmp-table" style="max-height:320px;overflow-y:auto;margin-top:8px;"></div>
+</div>
+
+<!-- Progress -->
+<div class="card">
+  <h2>進度 Progress</h2>
+  <div class="prog-row">
+    <span id="overall-label">整體：0 / 0</span>
+    <progress id="overall-bar" value="0" max="1"></progress>
+  </div>
+  <div class="prog-row">
+    <span id="step-label">步驟：-</span>
+    <progress id="step-bar" value="0" max="7"></progress>
+  </div>
+  <div id="proj-list"></div>
+</div>
+
+<!-- Log -->
+<div class="card">
+  <h2>Log 輸出</h2>
+  <div id="log"></div>
+</div>
+
+</div><!-- .container -->
+<script src="/js/app.js"></script>
+</body>
+</html>
