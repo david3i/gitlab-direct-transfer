@@ -1,17 +1,22 @@
-# GitLab Transfer Tool Guide
+# GitLab Transfer Tool — Server Deployment Guide
+
+This guide covers the **server-only deployment package**: a self-contained executable plus a static frontend folder.
 
 ---
 
 ## Deployment Package
 
+This directory is the complete deployment package:
+
 ```
 /
-├── deploy/
-├   └── GitLab-Transfer-Server.exe   ← server executable (built by build_server.bat)
-└── public/                      ← frontend (copy from source)
-    ├── index.html
-    ├── css/style.css
-    └── js/app.js
+├── GitLab-Transfer-Server.exe   ← server executable
+├── run_server.bat               ← double-click to start
+├── public/                      ← frontend static files
+│   ├── index.html
+│   ├── css/style.css
+│   └── js/app.js
+└── README_SERVER.md
 ```
 
 `config.json` is auto-created next to the `.exe` on first launch.
@@ -19,6 +24,11 @@
 ---
 
 ## Start Server
+
+**Quickstart — double-click `run_server.bat`.**  
+It starts the server and opens `http://localhost:5000` in the browser automatically.
+
+To start manually or with custom options:
 
 ```bat
 :: Default (localhost:5000)
@@ -31,8 +41,6 @@ GitLab-Transfer-Server.exe --port 8080
 GitLab-Transfer-Server.exe --host 0.0.0.0 --port 5000
 ```
 
-Open **http://localhost:5000** (or configured port) in a browser.
-
 ```
 Options:
   --host   Bind address  (default: 127.0.0.1)
@@ -40,6 +48,7 @@ Options:
 ```
 
 ---
+
 
 ## API Reference
 
