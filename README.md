@@ -1,6 +1,10 @@
-# GitLab Transfer Tool — Server Deployment Guide
+# GitLab Transfer Tool
+---
 
-This guide covers the **server-only deployment package**: a self-contained executable plus a static frontend folder.
+## Frontend UI
+![UI](https://github.com/user-attachments/assets/92bae6cb-bfe5-45b2-8fc8-67ef21ec34da)
+
+![UI](https://github.com/user-attachments/assets/abec5648-ceb3-45fa-b9df-99d64a7d3da2)
 
 ---
 
@@ -389,12 +393,3 @@ Browser (public/index.html)
 ```
 
 All API calls in `public/js/app.js` use **relative paths** (e.g., `fetch('/compare', ...)`), so the frontend must be served from the same origin as the server (i.e., via `http://localhost:5000`), not opened directly as a local file.
-
-
-
-## Frontend UI
-![UI](https://github.com/user-attachments/assets/92bae6cb-bfe5-45b2-8fc8-67ef21ec34da")
-
-![UI](https://github.com/user-attachments/assets/abec5648-ceb3-45fa-b9df-99d64a7d3da2")
-
-
