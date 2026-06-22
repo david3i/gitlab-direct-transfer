@@ -16,7 +16,7 @@ This directory is the complete deployment package:
 │   ├── index.html
 │   ├── css/style.css
 │   └── js/app.js
-└── README_SERVER.md
+└── README.md
 ```
 
 `config.json` is auto-created next to the `.exe` on first launch.
