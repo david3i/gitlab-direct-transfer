@@ -389,3 +389,15 @@ Browser (public/index.html)
 ```
 
 All API calls in `public/js/app.js` use **relative paths** (e.g., `fetch('/compare', ...)`), so the frontend must be served from the same origin as the server (i.e., via `http://localhost:5000`), not opened directly as a local file.
+
+
+---
+
+## Frontend UI
+
+```
+<img width="539" height="430" alt="image" src="https://github.com/user-attachments/assets/92bae6cb-bfe5-45b2-8fc8-67ef21ec34da" />
+
+<img width="482" height="427" alt="image" src="https://github.com/user-attachments/assets/abec5648-ceb3-45fa-b9df-99d64a7d3da2" />
+
+
