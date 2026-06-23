@@ -17,24 +17,24 @@
     <div>
       <div class="col-label">來源 Source</div>
       <label>GitLab URL</label>
-      <input type="url" id="src-url" value="https://gitlab-devops.iii.org.tw">
+      <input type="url" id="src-url" value="https://gitlab.example.com">
       <label>Group Path</label>
-      <input type="text" id="src-group" value="iiidevops">
+      <input type="text" id="src-group" value="my-group">
       <label>Username</label>
-      <input type="text" id="src-user" placeholder="your username">
+      <input type="text" id="src-user" placeholder="alice">
       <label>PAT (Personal Access Token)</label>
-      <input type="password" id="src-pat" placeholder="glpat-xxxxxxxxxxxx">
+      <input type="password" id="src-pat" placeholder="glpat-xxxx">
     </div>
     <div>
       <div class="col-label">目標 Target</div>
       <label>GitLab URL</label>
-      <input type="url" id="tgt-url" value="http://140.92.141.178:30000">
+      <input type="url" id="tgt-url" value="http://10.0.0.1:30000">
       <label>Group Path</label>
-      <input type="text" id="tgt-group" value="iii-devsecops">
+      <input type="text" id="tgt-group" value="target-group">
       <label>Username</label>
-      <input type="text" id="tgt-user" placeholder="your username">
+      <input type="text" id="tgt-user" placeholder="bob">
       <label>PAT (Personal Access Token)</label>
-      <input type="password" id="tgt-pat" placeholder="glpat-xxxxxxxxxxxx">
+      <input type="password" id="tgt-pat" placeholder="glpat-yyyy">
     </div>
   </div>
 </div>
@@ -78,7 +78,7 @@
         <h3>匯出 Export（來源 GitLab → 本機 .tar.gz）</h3>
         <div class="ie-row">
           <label>專案路徑</label>
-          <input id="exp-src-path" placeholder="iiidevops/a3nasw02（留空＝整個群組）">
+          <input id="exp-src-path" placeholder="my-group/project-name（留空＝整個群組）">
         </div>
         <div class="ie-row">
           <label>儲存目錄</label>
@@ -92,7 +92,7 @@
         <h3>匯入 Import（本機檔案 → 目標 GitLab）</h3>
         <div class="ie-row">
           <label>目標 Namespace</label>
-          <input id="imp-namespace" placeholder="iii-devsecops">
+          <input id="imp-namespace" placeholder="target-group">
         </div>
         <div class="ie-row">
           <label>檔案 / 目錄路徑</label>
